@@ -5,10 +5,11 @@
 
 from urllib.parse import urlencode
 from .web_request import json_request
-import datetime
+from datetime import datetime
+import math
 
-END_POINT = "http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService"
-SERVICE_KEY = "QdHkfm%2BbbCxyXKtLDwC%2FetAD3OkxlNmThephKw96FxPLhxNJbWdcp6NIJ0EJZSHVdjzaSa8fEMHlMlZ9rxJF5w%3D%3D"
+END_POINT = "http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService/getPchrgTrrsrtVisitorList"
+SERVICE_KEY = "10wfesCEKZKTWb9IhpFWutS0D6Z6p2M1j9BlDf0VCuhfzvsI74IuQND3AgnhxdIpSyI9lER%2FH55iva04jaZEtA%3D%3D"
 
 
 def pb_gen_url(endpoint = END_POINT, service_key = SERVICE_KEY, **params):
@@ -38,35 +39,52 @@ def pb_fetch_foreign_visitor(country_code, year, month):
 
     return json_items.get('item') if isinstance(json_items, dict) else None
 
-def pb_fetch_tourspot_visitor(district="", year=0, month=0):
-    url = pb_gen_url(
-        'http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService/getPchrgTrrsrtVisitorList',
-    YM='{0:04d}{1:02d}'.format(year, month),
-    SIDO='',
-    GUNGU='',
-    RES_NM='',
-    numOfRows=10,
-    _type='json',
-    pageNo=1)
+def pb_fetch_tourspot_visitor(district='', year=0, month=0):
 
-    # isnext = True   #true냐 false에 따라서 달라고하기
-    # while isnext is True: # isnext가 true면 루프돌기
-    #     json_result = json_request(url=url)
-    #     #페이징 정보 가져오기 왜? json result가 null일수 있어서
-    #     pageNo = None
-    #     if json_result is None:
-    #         pageNo =  None
-    #     else:
-    #         pageNo = json_result.get('pageNo')
+    pageno = 1
+    hasnext = True
+
+    while hasnext:
+        url = pb_gen_url(
+            endpoint=END_POINT,
+            YM='{0:04d}{1:02d}'.format(year, month),
+            SIDO=district,
+            GUNGU='',
+            RES_NM='',
+            numOfRows=20,
+            _type='json',
+            pageNo=pageno
+        )
+        json_result = json_request(url=url)
+
+        json_response = json_result.get('response')
+        json_header = json_response.get('header')
+        result_message = json_header.get('resultMsg')
+
+        if 'OK' != result_message:
+            print('%s Error[%s] for request %s' % (datetime.now(), result_message, url))
+            return None
+
+        json_body = json_response.get('body')
+        numofrows = json_body.get('numOfRows')
+        totalcount = json_body.get('totalCount')
+        json_items = json_body.get('items')
+
+        if totalcount == 0:
+            break
+
+        last_page = math.ceil(totalcount/numofrows)
+        if pageno == last_page:
+            hasnext = False
+        else:
+            pageno += 1
 
 
-    isnext=True
-    while isnext is True:
-        json_result=json_request(url=url)
-        pageNo = None if json_result is None else json_result.get('response').json_result.get('body').json_result.get('pageNo')
-        items = None if json_result is None else json_result.get('response').json_result.get('body').json_result.get('items').json_result.get('item')
-        url = None if pageNo is None else pageNo.get("pageNo")
+        yield json_items.get('item')
 
-        isnext = url is not None
+        # items = None if json_result is None else json_result.get('response').json_result.get('body').json_result.get('items')
+        # url = None if pageNo is None else pageNo.get("pageNo")
 
-        yield items
+        # hasnext = url is not None
+
+        # yield items

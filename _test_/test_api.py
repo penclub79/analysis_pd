@@ -6,7 +6,7 @@ url = pdapi.pb_gen_url(
     SIDO='서울특별시',
     GUNGU='',
     RES_NM='',
-    numOfRows=10,
+    numOfRows=20,
     _type='json',
     pageNo=1)
 
@@ -14,10 +14,10 @@ print(url)
 
 
 
-# # # pb_fetch_tourspot_visitor(district='서울특별시', year=2012, month=7)
-# for items in pdapi.pb_fetch_tourspot_visitor(district="서울특별시", year=2012, month=7):
-#     print(items)
+# pb_fetch_tourspot_visitor(district='서울특별시', year=2012, month=7)
+for items in pdapi.pb_fetch_tourspot_visitor(district="서울특별시", year=2012, month=7):
+    print(items)
 
 #test for pb_fetch_foreign_visitor
-item = pdapi.pb_fetch_foreign_visitor(112, 2012, 7)
-print(item)
+# item = pdapi.pb_fetch_foreign_visitor(112, 2012, 7)
+# print(item)

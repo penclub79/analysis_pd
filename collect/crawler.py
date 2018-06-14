@@ -34,9 +34,72 @@ def preprocess_foreign_visitor(data):       #저장해서 전처리로넣기
     else:
         data['date'] = data['ym']
         del data['ym']
+def preprocess_tourspot_visitor(data):
 
-def crawling_tourspot_visitor():
-    pass
+    #csNatCnt -> count_locals
+    if 'csNatCnt' not in data:
+        data['count_locals'] = 0
+    else:
+        data['count_locals'] = data['csNatCnt']
+    del data['csNatCnt']
+
+    #csForCnt->count_forigner
+    if 'csForCnt' not in data:
+        data['count_locals'] = 0
+    else:
+        data['count_locals'] = data['csForCnt']
+    del data['csForCnt']
+
+    #resNm -> tourist_spot
+    if 'resNm' not in data:
+        data['tourist_spot'] = 0
+    else:
+        data['tourist_spot'] = data['resNm']
+    del data['resNm']
+
+    #ym -> date
+    if 'ym' not in data:
+        data['date'] = 0
+    else:
+        data['date'] = data['ym']
+    del data['ym']
+
+    #sido->restrict1
+    if 'ym' not in data:
+        data['restrict1'] = 0
+    else:
+        data['restrict1'] = data['sido']
+    del data['sido']
+
+    # gungu->restrict2
+    if 'ym' not in data:
+        data['restrict2'] = 0
+    else:
+        data['restrict2'] = data['gungu']
+    del data['gungu']
+
+    # addrCd
+    del data['addrCd']
+    # rnum
+    del data['rnum']
+
+
+def crawling_tourspot_visitor(district, start_year, end_year):
+    results = []
+    for year in range(start_year, end_year+1):
+        for month in range(1,13):
+            datas = api.pb_fetch_tourspot_visitor(district, year, month)
+
+            for dataa in datas:
+                for data in dataa:
+                    preprocess_tourspot_visitor(data)
+                results += dataa
+
+    filename = '%s/%s_tourspot_%s_%s.json' % (RESULT_DIRECTORY, district, start_year, end_year)
+    with open(filename, 'w', encoding='utf-8') as outfile:
+        json_string = json.dumps(results, indent=4, sort_keys=True, ensure_ascii=False)
+        outfile.write(json_string)
+
 
 def crawling_foreign_visitor(country, start_year, end_year):
     results = []
