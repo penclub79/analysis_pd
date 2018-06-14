@@ -4,15 +4,29 @@
 #test for pd_gen_url
 
 from urllib.parse import urlencode
-# from .web_request import json_request
+from .web_request import json_request
 
 END_POINT = "http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService"
-SERVICE_KEY = "10wfesCEKZKTWb9IhpFWutS0D6Z6p2M1j9BlDf0VCuhfzvsI74IuQND3AgnhxdIpSyI9lER%2FH55iva04jaZEtA%3D%3D"
+SERVICE_KEY = "QdHkfm%2BbbCxyXKtLDwC%2FetAD3OkxlNmThephKw96FxPLhxNJbWdcp6NIJ0EJZSHVdjzaSa8fEMHlMlZ9rxJF5w%3D%3D"
 
 
-def pd_gen_url(endpoint = END_POINT, service_key = SERVICE_KEY, **params):
+def pb_gen_url(endpoint = END_POINT, service_key = SERVICE_KEY, **params):
 
     url = '%s?serviceKey=%s&%s' % (endpoint, service_key, urlencode(params))
 
     return url
 
+def pb_fetch_tourspot_visitor(district="", year=0, month=0):
+    url = pb_gen_url(
+        'http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService/getPchrgTrrsrtVisitorList',
+    YM='{0:04d}{1:02d}'.format(year, month),
+    SIDO='',
+    GUNGU='',
+    RES_NM='',
+    numOfRows=10,
+    _type='json',
+    for pageNo in totalCount:
+        pageNo+=totalCoun
+    )
+    json_result=json_request(url=url)
+    return json_result
