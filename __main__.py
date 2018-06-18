@@ -13,19 +13,28 @@ collect.crawling_tourspot_visitor(district='서울특별시',
 # #테스트 코드를 메인에 바로 만들어줌
 #     collect.crawling_foreign_visitor(country, 2017, 2017)
 
+# if __name__ == '__main__':
+#     collect.crawling_tourspot_visitor(
+#         district=CONFIG['district'],    #config에 잇는 함수 들고옴
+#         # start_year=CONFIG['common']['start_year'],
+#         # end_year=['common']['end_year']
+#         **CONFIG['common']
+#     )
+#
+#     for country in CONFIG['countries']:
+#         collect.crawling_foreign_visitor(
+#             country,
+#             **CONFIG['common'])
 if __name__ == '__main__':
+    #collect
     collect.crawling_tourspot_visitor(
-        district=CONFIG['district'],    #config에 잇는 함수 들고옴
-        # start_year=CONFIG['common']['start_year'],
-        # end_year=['common']['end_year']
-        **CONFIG['common']
-    )
+        district=CONFIG['district'],
+        **CONFIG['common'])
 
     for country in CONFIG['countries']:
         collect.crawling_foreign_visitor(
             country,
             **CONFIG['common'])
-
 #analysis데이터분석
 
 #visualize데이터 시각화

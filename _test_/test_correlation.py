@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 
 def ex1():
     heights = [100, 120, 130, 140, 150, 160, 170, 180, 190]
-    footsizes = [200, 205, 210, 220, 230, 240, 250, 270, 280, 285]
+    footsizes = [200, 205, 210, 220, 230, 240, 250, 270, 280]
 
     fig, subplots = plt.subplots(1, 1)
     subplots.scatter(heights, footsizes)
 
     plt.xlabel('키(cm)')
-    plt.ylaber('사이즈(mm)')
+    plt.ylabel('사이즈(mm)')
     plt.show()
 
 def ex2():
@@ -20,26 +20,22 @@ def ex2():
     subplots.scatter(heights, temps)
 
     plt.xlabel('산의 높이(m)')
-    plt.ylaber('온도(C)')
+    plt.ylabel('온도(℃)')
 
     plt.show()
 
 def ex3():
     fig, subplots = plt.subplots(1, 1)
+
     subplots.scatter(
-        np.random.random_integers()
+        np.random.random_integers(0, 100, 50),
+        np.random.random_integers(0, 100, 50)
     )
-
-    fig, subplots = plt.subplots(1, 1)
-    subplots.scatter(heights, temps)
-
-    plt.xlabel('산의 높이(m)')
-    plt.ylaber('온도(C)')
 
     plt.show()
 
 if __name__ == '__main__':
-    # ex1()
-    ex2()
+    ex1()
+    # ex2()
     # ex3()
 

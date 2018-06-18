@@ -2,25 +2,25 @@
 #공공data 서울특별시 관광 정보 크롤링
 
 #test for pd_gen_url
-
+import math
+from datetime import datetime
 from urllib.parse import urlencode
 from .web_request import json_request
-from datetime import datetime
-import math
 
 END_POINT = "http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService/getPchrgTrrsrtVisitorList"
-SERVICE_KEY = "QdHkfm%2BbbCxyXKtLDwC%2FetAD3OkxlNmThephKw96FxPLhxNJbWdcp6NIJ0EJZSHVdjzaSa8fEMHlMlZ9rxJF5w%3D%3D"
 
 
-def pb_gen_url(endpoint = END_POINT, service_key = SERVICE_KEY, **params):
 
-    url = '%s?serviceKey=%s&%s' % (endpoint, service_key, urlencode(params))
-
+def pb_gen_url(endpoint, service_key, **params):
+    url = '%s?serviceKey=%s&%s' % (endpoint, urlencode(params), service_key)
     return url
 
-def pb_fetch_foreign_visitor(country_code, year, month):
+
+
+def pb_fetch_foreign_visitor(country_code, year, month, service_key=''):
     endpoint = 'http://openapi.tour.go.kr/openapi/service/EdrcntTourismStatsService/getEdrcntTourismStatsList'
     url = pb_gen_url(endpoint,
+                     service_key,
                      YM='{0:04d}{1:02d}'.format(year, month),
                      NAT_CD=country_code,
                      ED_CE='E',
@@ -39,24 +39,32 @@ def pb_fetch_foreign_visitor(country_code, year, month):
 
     return json_items.get('item') if isinstance(json_items, dict) else None
 
-def pb_fetch_tourspot_visitor(district='', year=0, month=0, service_key=''):
-
+def pb_fetch_tourspot_visitor(
+        district1='',
+        district2='',
+        tourspot='',
+        year=0,
+        month=0,
+        service_key=''):
+    endpoint = 'http://openapi.tour.go.kr/openapi/service/EdrcntTourismStatsService/getEdrcntTourismStatsList'
     pageno = 1
     hasnext = True
 
+
     while hasnext:
         url = pb_gen_url(
-            endpoint=END_POINT,
+            endpoint,
             service_key,
             YM='{0:04d}{1:02d}'.format(year, month),
-            SIDO=district,
-            GUNGU='',
-            RES_NM='',
-            numOfRows=20,
+            SIDO=district1,
+            GUNGU=district2,
+            RES_NM=tourspot,
+            numOfRows=100,
             _type='json',
-            pageNo=pageno
-        )
+            pageNo=pageno)
         json_result = json_request(url=url)
+        if json_result is None:
+            break
 
         json_response = json_result.get('response')
         json_header = json_response.get('header')
