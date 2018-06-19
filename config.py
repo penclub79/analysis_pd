@@ -9,7 +9,7 @@ CONFIG = {
         'end_year': 2017,
         'fetch': False,
         'result_directory': '__results__/crawling',
-        'service_key': '%2FfZdR%2Bue1CSxLEnMkZXa9iDYontLTMTIteD5%2BzYCiMYpDKUZNUh2FHGDQ04zazSEmLl34FClDQk8a7flFCIQKA%3D%3D'
+        'service_key': 'QdHkfm%2BbbCxyXKtLDwC%2FetAD3OkxlNmThephKw96FxPLhxNJbWdcp6NIJ0EJZSHVdjzaSa8fEMHlMlZ9rxJF5w%3D%3D'
     }
 }
 

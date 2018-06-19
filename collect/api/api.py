@@ -12,7 +12,7 @@ END_POINT = "http://openapi.tour.go.kr/openapi/service/TourismResourceStatsServi
 
 
 def pb_gen_url(endpoint, service_key, **params):
-    url = '%s?serviceKey=%s&%s' % (endpoint, urlencode(params), service_key)
+    url = '%s?%s&serviceKey=%s' % (endpoint, urlencode(params), service_key)
     return url
 
 
@@ -46,7 +46,8 @@ def pb_fetch_tourspot_visitor(
         year=0,
         month=0,
         service_key=''):
-    endpoint = 'http://openapi.tour.go.kr/openapi/service/EdrcntTourismStatsService/getEdrcntTourismStatsList'
+
+    endpoint = 'http://openapi.tour.go.kr/openapi/service/TourismResourceStatsService/getPchrgTrrsrtVisitorList'
     pageno = 1
     hasnext = True
 
@@ -71,24 +72,25 @@ def pb_fetch_tourspot_visitor(
         result_message = json_header.get('resultMsg')
 
         if 'OK' != result_message:
-            print('%s Error[%s] for request %s' % (datetime.now(), result_message, url))
-            return None
+            print('%s Error[%s] for Request(%s)' % (datetime.now(), result_message, url))
+            break
 
         json_body = json_response.get('body')
+
         numofrows = json_body.get('numOfRows')
         totalcount = json_body.get('totalCount')
-        json_items = json_body.get('items')
+
 
         if totalcount == 0:
             break
 
-        last_page = math.ceil(totalcount/numofrows)
-        if pageno == last_page:
+        last_pageno = math.ceil(totalcount/numofrows)
+        if pageno == last_pageno:
             hasnext = False
         else:
             pageno += 1
 
-
+        json_items = json_body.get('items')
         yield json_items.get('item')
 
         # items = None if json_result is None else json_result.get('response').json_result.get('body').json_result.get('items')

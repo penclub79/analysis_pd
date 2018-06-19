@@ -1,5 +1,9 @@
 import collect
+import analyze
+import visualize
 from config import CONFIG
+import pandas as pd
+import matplotlib.pyplot as plt
 # if __name__ == '__main__':
 #     collect.crawlling_tourspot_visitor(district='서울특별시', start_year=2017, end_year=2017)
 
@@ -26,15 +30,28 @@ collect.crawling_tourspot_visitor(district='서울특별시',
 #             country,
 #             **CONFIG['common'])
 if __name__ == '__main__':
+    resultfiles = dict()
+
     #collect
-    collect.crawling_tourspot_visitor(
-        district=CONFIG['district'],
-        **CONFIG['common'])
+    resultfiles['tourspot_visitor'] = collect.crawling_tourspot_visitor(
+        district=CONFIG['district'], **CONFIG['common'])
 
+    resultfiles['foreign_visitor'] = []
     for country in CONFIG['countries']:
-        collect.crawling_foreign_visitor(
-            country,
-            **CONFIG['common'])
-#analysis데이터분석
+        rf = collect.crawling_foreign_visitor(country, **CONFIG['common'])
+        resultfiles['foreign_visitor'].append(rf)
 
-#visualize데이터 시각화
+#1. analysis and visualize데이터분석
+    #result_analysis = analyze.analysis_correlation(resultfiles)
+        #result_analysis 는 막대그래프
+    # visualize.graph_scatter(result_analysis)
+    #위는 산점형태
+    #위에는 장소 다합친거
+
+#2. visualize데이터 시각화
+    result_analysis = analyze.analysis_correlation_by_tourspot(resultfiles)  #장소별로 나오게하기
+    # grapth_table = pd.DataFrame(result_analysis, colums=['tourspot', 'r_중국', 'r_일본', 'r_미국'])
+    # grapth_table = grapth_table.set_index('tourspot')
+
+    # grapth_table.plot(kind='bar')
+    # plt.show()
