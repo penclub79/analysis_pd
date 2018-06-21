@@ -19,7 +19,7 @@ print(s1)
 # 딕션너리로 초기화 하기
 d = {'a': 10, 'b': 20, 'c': 30}
 s1 = pd.Series(d)
-print(s1)
+print("ssssssssss : ",s1)
 
 s1 = pd.Series(d, index=['A', 'B', 'C'])
 print(s1)

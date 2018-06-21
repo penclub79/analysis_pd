@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
 #2. visualize데이터 시각화
     result_analysis = analyze.analysis_correlation_by_tourspot(resultfiles)  #장소별로 나오게하기
-    # grapth_table = pd.DataFrame(result_analysis, colums=['tourspot', 'r_중국', 'r_일본', 'r_미국'])
+    # grapth_table = pd.DataFrame(result_analysis, colums=['tourspot', "r_중국", "r_일본", "r_미국" ])
     # grapth_table = grapth_table.set_index('tourspot')
-
+    # #
     # grapth_table.plot(kind='bar')
     # plt.show()
